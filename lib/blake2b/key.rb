@@ -10,7 +10,7 @@ class Blake2b
 
     # Create a blank Key
     #
-    # @return [Blake2b::Key] a Blake2::Key object with a `bytes` attr
+    # @return [Blake2b::Key] a Blake2b::Key object with a `bytes` attr
     def self.none
       new([])
     end
@@ -18,7 +18,7 @@ class Blake2b
     # Create a key from an ASCII String
     #
     # @param str [String] an ASCII String key
-    # @return [Blake2b::Key] a Blake2::Key object with a `bytes` attr
+    # @return [Blake2b::Key] a Blake2b::Key object with a `bytes` attr
     def self.from_string(str)
       if str.is_a?(String) && str.ascii_only?
         new(str.bytes)
@@ -30,7 +30,7 @@ class Blake2b
     # Create a key from a Hex String [a-fA-F0-9]
     #
     # @param str [String] a Hex String key
-    # @return [Blake2b::Key] a Blake2::Key object with a `bytes` attr
+    # @return [Blake2b::Key] a Blake2b::Key object with a `bytes` attr
     def self.from_hex(str)
       if str.is_a?(String) && str.match(/^[a-fA-F0-9]+$/)
         new([str].pack('H*').bytes)
