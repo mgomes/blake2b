@@ -4,19 +4,19 @@ BLAKE2 is a cryptographic hash function faster than MD5, SHA-1, SHA-2, and SHA-3
 
 More info at: [https://blake2.net](https://blake2.net).
 
-## SUMMARY
+## Summary
 
 This gem is a C-extension to enable using BLAKE2b in Ruby. This BLAKE2b implementation (or just BLAKE2) is optimized for 64-bit platforms with SSE support (excluding NEON-enabled ARMs). It produces digests of any size between 1 and 64 bytes.
 
 The C code for this gem is taken from the [official reference C implementation](https://github.com/BLAKE2/BLAKE2) as of commit [ca4c89314abff54e3806b44e4a08164f8204f09a](https://github.com/BLAKE2/BLAKE2/tree/ca4c89314abff54e3806b44e4a08164f8204f09a).
 
-## INSTALL
+## Install
 
 ```
 gem install blake2b
 ```
 
-## USAGE
+## Usage
 
 ``` ruby
 require 'blake2b'
@@ -60,7 +60,41 @@ Blake2b.bytes(input, key, out_len)
 
 ```
 
-## DEVELOPMENT
+## Performance
+
+`Blake2b` really shines on larger inputs. Here are some benchmarks on various input sizes. You can find the performance suite used for these benchmarks at `performance/performance_suite.rb`. All tests were run on an iMac 27" Late 2014, 4GHz Core i7 CPU (4790K) w/ SSE4.1 + SSE4.2, 32GB DDR3 RAM.
+
+### 1KB (1M digests)
+
+```
+MD5 result: 2.694545999998809 seconds.
+SHA2 result: 4.037195000011707 seconds.
+SHA512 result: 3.213850000000093 seconds.
+BLAKE2s result: 5.6867979999951785 seconds.
+BLAKE2b result: 4.375018999999156 seconds.
+```
+
+### 50KB (500k digests)
+
+```
+MD5 result: 34.33997299999464 seconds.
+SHA2 result: 50.161426999999094 seconds.
+SHA512 result: 35.24845699999423 seconds.
+BLAKE2s result: 64.8592859999917 seconds.
+BLAKE2b result: 30.783814999987953 seconds.
+```
+
+### 250KB (500k digests)
+
+```
+MD5 result: 67.89016799999808 seconds.
+SHA2 result: 103.09026799999992 seconds.
+SHA512 result: 72.46762200001103 seconds.
+BLAKE2s result: 133.5229810000019 seconds.
+BLAKE2b result: 64.30263599999307 seconds.
+```
+
+## Development
 
 After checking out the repo, run `bundle` to install dependencies. Then,
 run `rake full` to build and test, or `rake test` to only run the tests.
