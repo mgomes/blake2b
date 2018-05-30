@@ -3,10 +3,10 @@
 #include "blake2.h"
 
 typedef struct {
-  uint8_t key_length;
+  size_t key_length;
   uint8_t *key_bytes;
 
-  uint8_t output_length;
+  size_t output_length;
   uint8_t *output;
 
   VALUE to_hex;
@@ -44,7 +44,7 @@ VALUE m_blake2_initialize(VALUE self, VALUE _len, VALUE _key) {
   blake2->key_length  = RARRAY_LEN(key_bytes_ary);
   blake2->key_bytes   = (uint8_t*)malloc(blake2->key_length * sizeof(uint8_t));
 
-  for(i = 0; i < blake2->key_length; i++) {
+  for(i = 0; (unsigned)i < blake2->key_length; i++) {
     VALUE byte           = rb_ary_entry(key_bytes_ary, i);
     blake2->key_bytes[i] = NUM2INT(byte);
   }
@@ -59,8 +59,8 @@ VALUE m_blake2_initialize(VALUE self, VALUE _len, VALUE _key) {
 VALUE m_blake2_digest(VALUE self, VALUE _input, VALUE _representation) {
   Blake2 *blake2;
 
-  char *input      = RSTRING_PTR(_input);
-  int input_length = RSTRING_LEN(_input);
+  char *input           = RSTRING_PTR(_input);
+  uint64_t input_length = RSTRING_LEN(_input);
   int i;
 
   Data_Get_Struct(self, Blake2, blake2);
@@ -73,22 +73,22 @@ VALUE m_blake2_digest(VALUE self, VALUE _input, VALUE _representation) {
   if(_representation == blake2->to_bytes) {
     result = rb_ary_new2(blake2->output_length);
 
-    for(i = 0; i < blake2->output_length; i++) {
+    for(i = 0; (unsigned)i < blake2->output_length; i++) {
       rb_ary_push(result, INT2NUM(blake2->output[i]));
     }
   } else if(_representation == blake2->to_hex) {
-    int ary_len = blake2->output_length * sizeof(char) * 2;
+    unsigned long ary_len = blake2->output_length * (unsigned)sizeof(char) * 2;
     char *c_str = (char*)malloc(ary_len + 1);
 
-    for(i = 0; i < blake2->output_length; i++) {
+    for(i = 0; (unsigned)i < blake2->output_length; i++) {
       sprintf(c_str + (i * 2), "%02x", blake2->output[i]);
     }
     c_str[ary_len] = 0;
 
     result = rb_str_new(c_str, ary_len);
 
-    if(RSTRING_LEN(result) != ary_len) {
-      rb_raise(rb_eRuntimeError, "m_blake2_digest: sizes don't match. Ary: %d != %d", RSTRING_LEN(result), ary_len);
+    if((unsigned long)RSTRING_LEN(result) != ary_len) {
+      rb_raise(rb_eRuntimeError, "m_blake2_digest: sizes don't match. Ary: %lu != %lu", RSTRING_LEN(result), ary_len);
     }
 
     free(c_str);
@@ -99,7 +99,7 @@ VALUE m_blake2_digest(VALUE self, VALUE _input, VALUE _representation) {
   return result;
 }
 
-void Init_blake2_ext() {
+void Init_blake2b_ext() {
   cBlake2 = rb_define_class("Blake2b", rb_cObject);
   rb_define_alloc_func(cBlake2, blake2_alloc);
 
