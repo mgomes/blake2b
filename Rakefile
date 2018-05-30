@@ -22,7 +22,7 @@ task full: %w(clean compile test)
 
 def gemspec
   @gemspec ||= begin
-                 file = File.expand_path('../blake2.gemspec', __FILE__)
+                 file = File.expand_path('../blake2b.gemspec', __FILE__)
                  eval(File.read(file), binding, file)
                end
 end
@@ -35,7 +35,7 @@ end
 desc "Build the gem"
 task :gem => [:gemspec, :build] do
   mkdir_p "pkg"
-  sh "gem build blake2.gemspec"
+  sh "gem build blake2b.gemspec"
   mv "#{gemspec.full_name}.gem", "pkg"
 
   require 'digest/sha2'
