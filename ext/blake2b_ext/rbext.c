@@ -65,8 +65,8 @@ VALUE m_blake2_digest(VALUE self, VALUE _input, VALUE _representation) {
 
   Data_Get_Struct(self, Blake2, blake2);
 
-  blake2b(blake2->output, input, blake2->key_bytes,
-      blake2->output_length, input_length, blake2->key_length);
+  blake2b(blake2->output, blake2->output_length, input, input_length,
+      blake2->key_bytes, blake2->key_length);
 
   VALUE result;
 
