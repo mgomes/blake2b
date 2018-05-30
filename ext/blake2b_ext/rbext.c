@@ -34,7 +34,7 @@ static VALUE blake2_alloc(VALUE klass) {
 VALUE m_blake2_initialize(VALUE self, VALUE _len, VALUE _key) {
   Blake2 *blake2;
   Data_Get_Struct(self, Blake2, blake2);
-  int i;
+  unsigned int i;
 
   ID bytes_method  = rb_intern("bytes");
   blake2->to_hex   = ID2SYM(rb_intern("to_hex"));
@@ -44,7 +44,7 @@ VALUE m_blake2_initialize(VALUE self, VALUE _len, VALUE _key) {
   blake2->key_length  = RARRAY_LEN(key_bytes_ary);
   blake2->key_bytes   = (uint8_t*)malloc(blake2->key_length * sizeof(uint8_t));
 
-  for(i = 0; (unsigned)i < blake2->key_length; i++) {
+  for(i = 0; i < blake2->key_length; i++) {
     VALUE byte           = rb_ary_entry(key_bytes_ary, i);
     blake2->key_bytes[i] = NUM2INT(byte);
   }
@@ -61,7 +61,7 @@ VALUE m_blake2_digest(VALUE self, VALUE _input, VALUE _representation) {
 
   char *input           = RSTRING_PTR(_input);
   uint64_t input_length = RSTRING_LEN(_input);
-  int i;
+  unsigned int i;
 
   Data_Get_Struct(self, Blake2, blake2);
 
@@ -73,14 +73,14 @@ VALUE m_blake2_digest(VALUE self, VALUE _input, VALUE _representation) {
   if(_representation == blake2->to_bytes) {
     result = rb_ary_new2(blake2->output_length);
 
-    for(i = 0; (unsigned)i < blake2->output_length; i++) {
+    for(i = 0; i < blake2->output_length; i++) {
       rb_ary_push(result, INT2NUM(blake2->output[i]));
     }
   } else if(_representation == blake2->to_hex) {
     unsigned long ary_len = blake2->output_length * (unsigned)sizeof(char) * 2;
     char *c_str = (char*)malloc(ary_len + 1);
 
-    for(i = 0; (unsigned)i < blake2->output_length; i++) {
+    for(i = 0; i < blake2->output_length; i++) {
       sprintf(c_str + (i * 2), "%02x", blake2->output[i]);
     }
     c_str[ary_len] = 0;
