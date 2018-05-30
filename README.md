@@ -25,11 +25,11 @@ require 'blake2b'
 input   = 'abc'
 
 # The main application of keyed BLAKE2 is as a message authentication code (MAC)
-# By default `Blake2::Key.none` is used.
+# By default `Blake2b::Key.none` is used.
 key = Blake2b::Key.none
-# key = Blake2::Key.from_string("foo bar baz")
-# key = Blake2::Key.from_hex('DEADBEAF')
-# key = Blake2::Key.from_bytes([222, 173, 190, 175])
+# key = Blake2b::Key.from_string("foo bar baz")
+# key = Blake2b::Key.from_hex('DEADBEAF')
+# key = Blake2b::Key.from_bytes([222, 173, 190, 175])
 
 # The output length in Bytes of the Hash, Max and Default is 32.
 out_len = 32
