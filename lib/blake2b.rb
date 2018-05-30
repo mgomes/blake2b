@@ -21,8 +21,8 @@ class Blake2b
       raise ArgumentError, 'key arg must be a Blake2b::Key'
     end
 
-    unless out_len.is_a?(Integer) && out_len.between?(1, 32)
-      raise ArgumentError, 'out_len arg must be an Integer between 1 and 32 inclusive'
+    unless out_len.is_a?(Integer) && out_len.between?(1, 64)
+      raise ArgumentError, 'out_len arg must be an Integer between 1 and 64 inclusive'
     end
   end
   private_class_method :check_if_valid!
